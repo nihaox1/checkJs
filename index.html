@@ -1,0 +1,37 @@
+﻿<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+	<script type="text/javascript" src="js/JQ.js"></script>
+	<script type="text/javascript" src="js/check.js"></script>
+<style type="text/css">
+	.error{ border:  1px solid #f00; }
+</style>
+</head>
+<body>
+	<input type="text" name="username" _rule="length[6,18]" _content="用户名错误" />
+	<input type="password" name="pwd" _rule="length[6,18] pwd" _content="密码输入错误" />
+	<input type="text" name="phone" _rule="number[100,15887456]" _content="手机号码错误" />
+	<input type="text" name="phone" _rule="phone" _content="手机号码错误" />
+	<input type="text" name="phone" _rule="email" _content="邮箱" />
+	<p>
+		<a class="btn btn-primary" onclick="get();">验证</a>
+	</p>
+</body>
+<script type="text/javascript">
+function E( x ){ try{ console.log( x ); } catch( e ) {}; };
+var _form = $("body").check( {
+	render : function( $input , pass , content ){
+		$input[ ( pass ? "remove" : "add" ) + "Class" ]( "error" );
+	}
+} , {
+	rules 	: {
+		number 	: function( str , opts ){
+			return true;
+		}
+	}
+} );
+E( _form.error() );
+
+E( $.check( "number" , "xxxxxxx" ) );
+</script>
+</html>

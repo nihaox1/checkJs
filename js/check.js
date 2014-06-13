@@ -72,10 +72,8 @@
 		ev 	: {
 			check_error : function( $input , opts ){
 				var _config = this.config,
-					_opts = opts[ 1 ] ? opts[ 1 ].split( "," ) : undefined,
-					_pass = _config.rules[ opts[ 0 ] ].call( $input , $input.val() , _opts );
-				_config.render( $input , _pass , $input.attr( "_content" ) );
-				return _pass;
+					_opts = opts[ 1 ] ? opts[ 1 ].split( "," ) : undefined;
+				return _config.rules[ opts[ 0 ] ].call( $input , $input.val() , _opts );
 			},
 			/*!
 			 *	检测input错误
@@ -83,16 +81,18 @@
 			 */
 			test_error : function( check ){
 				var _$this 	= $( this ),
-					_rule	= _$this.attr( "_rule" ).replace( /\s*/gi , " " ).replace( /[\s*]/gi , "" ).split( " " ),
-					_opts;
+					_rule	= _$this.attr( "_rule" ).replace( /\s*/gi , "" ).replace( /\]/gi , "]c&" ).split( "c&" ),
+					_opts,
+					_pass;
 				for( var i = 0 , len = _rule.length; i < len; i++ ){
+					_pass = true;
 					_opts = _rule[ i ].replace( /(.*)\[(.*)\]/gi , "$1-$2" ).split( "-" );
 					if( check.config.rules[ _opts[ 0 ] ] ){
-						if( tool.ev.check_error.call( check , _$this , _opts ) === false ){
-							return false; 
-						};
+						_pass = tool.ev.check_error.call( check , _$this , _opts );
 					};
+					if( !_pass ){ break; };
 				};
+				check.config.render( _$this , _pass , _$this.attr( "_content" ) );
 			},
 			/*!
 			 *	每一次 触发验证 插件的 启动点
@@ -167,6 +167,19 @@
 			},
 			phone 		: function( str ){
 				return /^1(3|5|8)\d{9}$/gi.test( str ) ? true : false;
+			},
+			pwd 		: function( str ){
+				return 	str.length < 6 ? false :
+							(function(){
+								var _reg 	= [ /[a-z,A-Z]+/gi , /\d+/gi , /\W+/gi ],
+									_count 	= 0;
+								for( var i = _reg.length; i--; ){
+									if( _reg[ i ].test( str ) ){
+										_count++;
+									};
+								};
+								return _count < 2 ? false : true; 
+							})();
 			}
 		}
 	} );

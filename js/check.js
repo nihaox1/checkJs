@@ -93,6 +93,7 @@
 					if( !_pass ){ break; };
 				};
 				check.config.render( _$this , _pass , _$this.attr( "_content" ) );
+				return _pass;
 			},
 			/*!
 			 *	每一次 触发验证 插件的 启动点
@@ -151,24 +152,24 @@
 (function(){
 	$.fn.check( "config" , {
 		rules	: {
-			email 		: function( str ){
+			"email" 		: function( str ){
 				return /.*@[a-z,A-Z,\d]+..*$/gi.test( str );
 			},
-			length 		: function( str , options ){
+			"length" 		: function( str , options ){
 				var _len = str.length;
 				return _len < options[ 0 ] ? false :
 							_len > options[ 1 ] ? false : true;
 			},
-			number 		: function( str , options ){
+			"number" 		: function( str , options ){
 				return !$.isNumeric( str ) ? false : 
 							!options ? true : 
 								str < parseInt( options[ 0 ] ) ? false :
 									str > parseInt( options[ 1 ] ) ? false : true; 
 			},
-			phone 		: function( str ){
+			"phone" 		: function( str ){
 				return /^1(3|5|8)\d{9}$/gi.test( str ) ? true : false;
 			},
-			pwd 		: function( str ){
+			"pwd" 		: function( str ){
 				return 	str.length < 6 ? false :
 							(function(){
 								var _reg 	= [ /[a-z,A-Z]+/gi , /\d+/gi , /\W+/gi ],
